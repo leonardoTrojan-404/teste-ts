@@ -1,0 +1,11 @@
+{
+  "name": "restaurant-os",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Management platform for restaurants",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "test": "vitest run"
+  }
+}
