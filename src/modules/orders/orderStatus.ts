@@ -33,9 +33,23 @@ export function transition(order: TrackedOrder, to: OrderStatus): TrackedOrder {
   return { ...order, status: to };
 }
 
+const TERMINAL_STATUSES: readonly OrderStatus[] = ['delivered', 'cancelled'];
+
 export function filterByStatus(
   orders: readonly TrackedOrder[],
-  status: OrderStatus,
+  statuses: readonly OrderStatus[],
 ): readonly TrackedOrder[] {
-  return orders.filter((order) => order.status === status);
+  if (statuses.length === 0) {
+    return orders;
+  }
+  return orders.filter((order) => statuses.includes(order.status));
+}
+
+/**
+ * The floor view asks for "active" orders. Passing a single status could never
+ * express that, so callers were falling back to the unfiltered list and showing
+ * cancelled orders next to live ones.
+ */
+export function filterActive(orders: readonly TrackedOrder[]): readonly TrackedOrder[] {
+  return orders.filter((order) => !TERMINAL_STATUSES.includes(order.status));
 }
