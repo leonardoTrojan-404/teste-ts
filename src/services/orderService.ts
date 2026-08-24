@@ -1,22 +1,10 @@
 import type { TrackedOrder, OrderStatus } from '../modules/orders/orderStatus';
+import { request } from './apiClient';
 
-const ENDPOINT = '/api/orders';
-
-export async function listOrders(restaurantId: string): Promise<readonly TrackedOrder[]> {
-  const response = await fetch(`${ENDPOINT}?restaurantId=${restaurantId}`);
-  if (!response.ok) {
-    throw new Error(`failed to load orders: ${response.status}`);
-  }
-  return (await response.json()) as TrackedOrder[];
+export function listOrders(restaurantId: string): Promise<readonly TrackedOrder[]> {
+  return request<TrackedOrder[]>('/orders', { query: { restaurantId } });
 }
 
-export async function updateOrderStatus(id: string, status: OrderStatus): Promise<void> {
-  const response = await fetch(`${ENDPOINT}/${id}/status`, {
-    method: 'PATCH',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ status }),
-  });
-  if (!response.ok) {
-    throw new Error(`failed to update order ${id}: ${response.status}`);
-  }
+export function updateOrderStatus(id: string, status: OrderStatus): Promise<void> {
+  return request<void>(`/orders/${id}/status`, { method: 'PATCH', body: { status } });
 }
