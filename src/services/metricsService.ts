@@ -1,6 +1,5 @@
 import type { DashboardSnapshot, DashboardWindow } from '../modules/dashboard/dashboard';
-
-const ENDPOINT = '/api/metrics';
+import { request } from './apiClient';
 
 export interface RawMetricsRow {
   readonly bucket: string;
@@ -24,11 +23,8 @@ export async function fetchMetrics(
   restaurantId: string,
   window: DashboardWindow,
 ): Promise<DashboardSnapshot> {
-  const query = new URLSearchParams({ restaurantId, from: window.from, to: window.to });
-  const response = await fetch(`${ENDPOINT}?${query.toString()}`);
-  if (!response.ok) {
-    throw new Error(`failed to load metrics: ${response.status}`);
-  }
-  const rows = (await response.json()) as RawMetricsRow[];
+  const rows = await request<RawMetricsRow[]>('/metrics', {
+    query: { restaurantId, from: window.from, to: window.to },
+  });
   return aggregate(rows, window);
 }
