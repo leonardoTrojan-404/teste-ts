@@ -10,6 +10,20 @@ export interface DashboardSnapshot {
   readonly averageTicketCents: number;
 }
 
+export type LoadState = 'idle' | 'loading' | 'ready' | 'error';
+
+/**
+ * The panel used to derive "is loading" from `snapshot === EMPTY_SNAPSHOT`,
+ * which is also true on the first successful render of a quiet restaurant.
+ * Loading is now tracked explicitly.
+ */
+export function nextLoadState(current: LoadState, event: 'fetch' | 'resolve' | 'reject'): LoadState {
+  if (event === 'fetch') {
+    return current === 'loading' ? current : 'loading';
+  }
+  return event === 'resolve' ? 'ready' : 'error';
+}
+
 export const EMPTY_SNAPSHOT: DashboardSnapshot = {
   window: { from: '', to: '' },
   openOrders: 0,
