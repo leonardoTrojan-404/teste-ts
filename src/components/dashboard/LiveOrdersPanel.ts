@@ -1,14 +1,19 @@
-import type { DashboardSnapshot } from '../../modules/dashboard/dashboard';
+import type { DashboardSnapshot, LoadState } from '../../modules/dashboard/dashboard';
 import { isStale } from '../../modules/dashboard/dashboard';
 
 const STALE_AFTER_MS = 60_000;
 
 export interface LiveOrdersPanelProps {
   readonly snapshot: DashboardSnapshot;
+  readonly loadState: LoadState;
   readonly now: Date;
 }
 
 export function renderLiveOrdersPanel(props: LiveOrdersPanelProps): string {
+  if (props.loadState === 'loading') {
+    return '<section class="live-orders live-orders--loading" aria-busy="true"></section>';
+  }
+
   const stale = isStale(props.snapshot, props.now, STALE_AFTER_MS);
 
   return `
