@@ -1,22 +1,10 @@
 import type { MenuCategory } from '../modules/menu/menuCategory';
+import { request } from './apiClient';
 
-const ENDPOINT = '/api/menu';
-
-export async function loadMenu(restaurantId: string): Promise<readonly MenuCategory[]> {
-  const response = await fetch(`${ENDPOINT}?restaurantId=${restaurantId}`);
-  if (!response.ok) {
-    throw new Error(`failed to load menu: ${response.status}`);
-  }
-  return (await response.json()) as MenuCategory[];
+export function loadMenu(restaurantId: string): Promise<readonly MenuCategory[]> {
+  return request<MenuCategory[]>('/menu', { query: { restaurantId } });
 }
 
-export async function saveCategory(category: MenuCategory): Promise<void> {
-  const response = await fetch(`${ENDPOINT}/categories/${category.id}`, {
-    method: 'PUT',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(category),
-  });
-  if (!response.ok) {
-    throw new Error(`failed to save category ${category.id}: ${response.status}`);
-  }
+export function saveCategory(category: MenuCategory): Promise<void> {
+  return request<void>(`/menu/categories/${category.id}`, { method: 'PUT', body: category });
 }
