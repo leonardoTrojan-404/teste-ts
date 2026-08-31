@@ -1,5 +1,5 @@
 import type { TrackedOrder } from '../../modules/orders/orderStatus';
-import { orderSubtotalCents } from '../../modules/orders/order';
+import { orderTotalCents } from '../../modules/orders/order';
 
 export interface OrderListProps {
   readonly orders: readonly TrackedOrder[];
@@ -16,7 +16,7 @@ export function renderOrderList(props: OrderListProps): string {
     <li class="order-row" data-id="${order.id}" data-status="${order.status}">
       <span class="order-row__id">#${order.id}</span>
       <span class="order-row__channel">${order.channel}</span>
-      <span class="order-row__total">${(orderSubtotalCents(order) / 100).toFixed(2)}</span>
+      <span class="order-row__total">${(orderTotalCents(order) / 100).toFixed(2)}</span>
     </li>`,
   );
 
