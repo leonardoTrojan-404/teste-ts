@@ -19,12 +19,31 @@ export function aggregate(rows: readonly RawMetricsRow[], window: DashboardWindo
   };
 }
 
+/**
+ * The dashboard renders four widgets, each of which used to call fetchMetrics
+ * with its own window — four round trips and four full table scans per refresh.
+ * The backend accepts a list of windows, so ask once.
+ */
+export async function fetchMetricsBatch(
+  restaurantId: string,
+  windows: readonly DashboardWindow[],
+): Promise<readonly DashboardSnapshot[]> {
+  if (windows.length === 0) {
+    return [];
+  }
+
+  const rowsByWindow = await request<Record<string, RawMetricsRow[]>>('/metrics/batch', {
+    method: 'POST',
+    body: { restaurantId, windows },
+  });
+
+  return windows.map((window) => aggregate(rowsByWindow[`${window.from}/${window.to}`] ?? [], window));
+}
+
 export async function fetchMetrics(
   restaurantId: string,
   window: DashboardWindow,
 ): Promise<DashboardSnapshot> {
-  const rows = await request<RawMetricsRow[]>('/metrics', {
-    query: { restaurantId, from: window.from, to: window.to },
-  });
-  return aggregate(rows, window);
+  const [snapshot] = await fetchMetricsBatch(restaurantId, [window]);
+  return snapshot ?? aggregate([], window);
 }
