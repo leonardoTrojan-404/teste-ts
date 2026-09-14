@@ -1,5 +1,5 @@
-import type { Notification } from '../../modules/notifications/notification';
-import { AUTO_DISMISS_MS, shouldAutoDismiss } from '../../modules/notifications/notification';
+import type { Notification } from '../notification';
+import { AUTO_DISMISS_MS, shouldAutoDismiss } from '../notification';
 
 export interface ToastStackProps {
   readonly notifications: readonly Notification[];

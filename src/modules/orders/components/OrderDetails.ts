@@ -1,6 +1,6 @@
-import type { TrackedOrder } from '../../modules/orders/orderStatus';
-import { ORDER_STATUSES, canTransition } from '../../modules/orders/orderStatus';
-import { orderTotalCents } from '../../modules/orders/order';
+import type { TrackedOrder } from '../orderStatus';
+import { ORDER_STATUSES, canTransition } from '../orderStatus';
+import { orderTotalCents } from '../order';
 
 export interface OrderDetailsProps {
   readonly order: TrackedOrder;

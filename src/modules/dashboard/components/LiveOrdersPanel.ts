@@ -1,5 +1,5 @@
-import type { DashboardSnapshot, LoadState } from '../../modules/dashboard/dashboard';
-import { isStale } from '../../modules/dashboard/dashboard';
+import type { DashboardSnapshot, LoadState } from '../dashboard';
+import { isStale } from '../dashboard';
 
 const STALE_AFTER_MS = 60_000;
 

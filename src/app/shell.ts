@@ -1,5 +1,5 @@
 import { registerRoutes, type Route } from './routes';
-import { renderLayout } from '../components/AppLayout';
+import { renderLayout } from '../components/layout/AppLayout';
 
 export interface ShellOptions {
   readonly mountPoint: string;

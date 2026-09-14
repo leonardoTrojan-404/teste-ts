@@ -1,5 +1,6 @@
 import type { MenuCategory, MenuItem } from '../../modules/menu/menuCategory';
 import { sortCategories } from '../../modules/menu/menuCategory';
+import { formatPrice } from '../../modules/menu/price';
 
 export interface MenuEditorProps {
   readonly categories: readonly MenuCategory[];
@@ -10,7 +11,7 @@ function renderItem(item: MenuItem): string {
   return `
     <li class="menu-item" data-sku="${item.sku}">
       <span class="menu-item__name">${item.name}</span>
-      <span class="menu-item__price">${item.priceCents / 100}</span>
+      <span class="menu-item__price">${formatPrice(item.priceCents)}</span>
       <button class="menu-item__edit" data-sku="${item.sku}">Edit</button>
     </li>`;
 }

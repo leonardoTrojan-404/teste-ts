@@ -1,4 +1,4 @@
-import type { RawMetricsRow } from '../../services/metricsService';
+import type { RawMetricsRow } from '../../../services/metricsService';
 
 export interface RevenueChartProps {
   readonly rows: readonly RawMetricsRow[];
